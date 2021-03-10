@@ -263,10 +263,10 @@ abstract class Tables(sqlContext: SQLContext, scaleFactor: String,
       }
     }
 
-    def createTemporaryTable(location: String, format: String): Unit = {
+    def createTemporaryTable(location: String, format: String, schema: StructType): Unit = {
       println(s"Creating temporary table $name using data stored in $location.")
       log.info(s"Creating temporary table $name using data stored in $location.")
-      sqlContext.read.format(format).load(location).createOrReplaceTempView(name)
+      sqlContext.read.format(format).schema(schema).load(location).createOrReplaceTempView(name)
     }
 
     def analyzeTable(databaseName: String, analyzeColumns: Boolean = false): Unit = {
@@ -338,7 +338,7 @@ abstract class Tables(sqlContext: SQLContext, scaleFactor: String,
     }
     filtered.foreach { table =>
       val tableLocation = s"$location/${table.name}"
-      table.createTemporaryTable(tableLocation, format)
+      table.createTemporaryTable(tableLocation, format, table.schema)
     }
   }
 
