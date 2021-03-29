@@ -7,7 +7,7 @@ select
 	o_orderkey,
 	o_orderdate,
 	o_totalprice,
-	sum(l_quantity)
+	sum(l_quantity) as sum_lquantity
 from
 	customer,
 	orders,
